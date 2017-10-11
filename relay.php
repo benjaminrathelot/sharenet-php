@@ -3,8 +3,9 @@
 /*
 First published under : https://sourceforge.net/projects/sharenet/
 License: http://creativecommons.org/licenses/by-nc-nd/3.0/
-This script mustn't be edited in order to make it work with every other relays.
-You should download SharenetLib - https://sourceforge.net/projects/sharenet/
+
+This script should not be edited in order to work with other nodes.
+
 ----------- RELAY -----------
 The sharenet has been first initiated by Benjamin Rathelot in 2013.
 The aim of ShareNet is to create a p2p network in PHP to relay messages over the internet.
@@ -19,11 +20,12 @@ Use the sharenetLib.php functions to send a message, add a node, create an user 
 Contact me as soon as you set a relay, it will be added in the next version : https://fr.linkedin.com/in/benjaminrathelot
 
 
-
+-----------  CONFIG ----------- 
 */
 $__port = 80; // the port of your server
 $__max_relay = 1500; // how many server addresses the relay will store
 $__save_messages = true; // true to store messages on the server --- you can't relay without saving the latest messages
+
 // -------------------------
 $__host = $_SERVER['SERVER_ADDR'].':'.$__port;
 
