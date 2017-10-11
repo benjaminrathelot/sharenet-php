@@ -1,13 +1,13 @@
 ﻿<?php
-// Sharenet Project
+// Sharenet Project — 2017 
 /*
-https://sourceforge.net/projects/sharenet/
+First published under : https://sourceforge.net/projects/sharenet/
 License: http://creativecommons.org/licenses/by-nc-nd/3.0/
 This script mustn't be edited in order to make it work with every other relays.
 You should download SharenetLib - https://sourceforge.net/projects/sharenet/
 ----------- RELAY -----------
-The sharenet has been first initiated by Benjamin Rathelot / agencys.eu in 2013.
-The aim of ShareNet is to create a kind of p2p network in PHP to relay messages over the internet.
+The sharenet has been first initiated by Benjamin Rathelot in 2013.
+The aim of ShareNet is to create a p2p network in PHP to relay messages over the internet.
 This script is only a relay, it helps the network and can store the messages.
 Your relay won't be reachable if you edit its filename. It must be http://domain/relay.php 
 You can create a script to add and manage users but don't forget that they have to be stored in data/config/user.lst
@@ -15,36 +15,14 @@ When you receive a message from another peer its address is added to data/config
 Every messages you receive are sent to the peers stored in your serv.lst
 You should first send a message to a famous relay in order to make your relay known by everyone.
 
-Example to send a message
+Use the sharenetLib.php functions to send a message, add a node, create an user and more.
+Contact me as soon as you set a relay, it will be added in the next version : https://fr.linkedin.com/in/benjaminrathelot
 
-function sharenetSend($user, $message) {
-    // Check if the user exists etc.
-    $host = "mydomain.com:80";
-    $date = time();
-    $author = $user."@".$host;
-    if(strlen($message)<201) {
-        $hash = sha1(htmlspecialchars($message.$author).md5(htmlspecialchars(substr($message, 0, 200)).$date);
-        $file = array("hash"=>$hash, "date"=>$date, "from"=>$host, "author"=>$author, "message"=>$message);
-        file_put_contents("data/".$hash.".snm", json_encode($file));
 
-        $s = file_get_contents("data/config/serv.lst");
-        $r_list = preg_split('/\r?\n/', $s);
-        foreach($r_list as $relay) {
-            $get = file_get_contents("http://".$relay."/relay.php?message=".urlencode($message)."&author=".$author."&date=".$date."&from=".$host);
-            if(preg_match("#ok#", $get)) {
-                echo "ok: ".$relay;
-            }
-            else
-            {
-                echo htmlspecialchars($get).">>".$relay;
-            }
-        }
-    }
-}
 
 */
 $__port = 80; // the port of your server
-$__max_relay = 1500; // how much server addresses the relay will store
+$__max_relay = 1500; // how many server addresses the relay will store
 $__save_messages = true; // true to store messages on the server --- you can't relay without saving the latest messages
 // -------------------------
 $__host = $_SERVER['SERVER_ADDR'].':'.$__port;
@@ -82,7 +60,7 @@ if(isset($_GET['message'], $_GET['from'], $_GET['date'], $_GET['author'])) {
         }
         $hash = sha1(htmlspecialchars($_GET['message']).$_GET['author']).md5(htmlspecialchars(substr($_GET['message'], 0, 200)).$_GET['date']);
         $from_serv_response = @file_get_contents("http://".$fdomain[0].":".$fport."/relay.php?hash=".$hash);
-        if(!preg_match("#ok#",$from_serv_response)) { echo "error:unknow source";exit; }
+        if(!preg_match("#ok#",$from_serv_response)) { echo "error:unknown source";exit; }
         if(@fsockopen($domain[0], $port)) {
             if(!file_exists("data/".$hash.".snm")) {
                 $main_serv_response = @file_get_contents("http://".$domain[0].":".$port."/relay.php?user=".urlencode($author[0])."&hash=".$hash);
